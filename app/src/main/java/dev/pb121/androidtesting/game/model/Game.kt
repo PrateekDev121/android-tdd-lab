@@ -1,6 +1,12 @@
 package dev.pb121.androidtesting.game.model
 
-class Game(hScore: Int = 0) {
+class Game(
+    questions: List<Question>,
+    hScore: Int
+) {
+
+    val questionList =
+        questions.takeIf { it.isNotEmpty() }?.toMutableList() ?: throw IllegalArgumentException("Questions list can not be empty")
 
     var highestScore: Int = hScore
         private set
@@ -10,8 +16,12 @@ class Game(hScore: Int = 0) {
 
     fun incrementScore() {
         currentScore++
-        if(currentScore > highestScore){
+        if (currentScore > highestScore) {
             highestScore++
         }
+    }
+
+    fun nextQuestion(): Question? {
+        return questionList.removeFirstOrNull()
     }
 }

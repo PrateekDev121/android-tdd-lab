@@ -1,29 +1,79 @@
 package dev.pb121.androidtesting.game.model
 
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 class GameUnitTest {
 
-    @Test
-    fun whenIncrement_scoreShouldIncreasedBy1(){
+    val q1 = Question(correctAnswer = "q1Correct", inCorrectAnswer = "q1Incorrect")
+    val q2 = Question(correctAnswer = "q2Correct", inCorrectAnswer = "q2Incorrect")
+    lateinit var questionList: List<Question>
 
-        val game = Game()
-        game.incrementScore()
-        Assert.assertEquals("current score should be 1",1,game.currentScore)
+    @Before
+    fun setup() {
+        questionList = listOf(q1, q2)
     }
 
     @Test
-    fun wheIncrementScore_aboveHighScore_highScoreShouldIncrement(){
-        val game = Game()
+    fun whenIncrement_scoreShouldIncreasedBy1() {
+
+        val game = Game(questions = questionList, hScore = 0)
         game.incrementScore()
-        Assert.assertEquals("high score should be 1",1,game.highestScore)
+        Assert.assertEquals("current score should be 1", 1, game.currentScore)
     }
 
     @Test
-    fun wheIncrementScore_belowHighScore_highScoreShouldIncrement(){
-        val game = Game(10)
+    fun wheIncrementScore_aboveHighScore_highScoreShouldIncrement() {
+        val game = Game(questions = questionList, hScore = 0)
         game.incrementScore()
-        Assert.assertEquals(10,game.highestScore)
+        Assert.assertEquals("high score should be 1", 1, game.highestScore)
+    }
+
+    @Test
+    fun wheIncrementScore_belowHighScore_highScoreShouldIncrement() {
+        val game = Game(questions = questionList, hScore = 10)
+        game.incrementScore()
+        Assert.assertEquals(10, game.highestScore)
+    }
+
+    // game should have a list of question, getting next should return the first
+    // when getting next question, without mre question, it should return null
+    // getOptions method
+
+    @Test
+    fun `game should have a list of questions and return first if have question`() {
+        val game = Game(
+            questions = questionList,
+            hScore = 0,
+        )
+        val nextQuestion = game.nextQuestion()
+        Assert.assertEquals(q1, nextQuestion)
+
+    }
+
+    //game cannot be initialized with empty list of questions
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `game should not init with empty list of question`() {
+        Game(
+            questions = emptyList(),
+            hScore = 0
+        )
+    }
+
+    @Test
+    fun `game should return null when question list is empty`() {
+        val maxSize = 1
+        val game = Game(
+            questions = questionList.take(n = maxSize).takeIf { it.size == maxSize }!!,
+            hScore = 0,
+        )
+
+        game.nextQuestion()
+
+        val question = game.nextQuestion()
+
+        Assert.assertNull(question)
     }
 }
