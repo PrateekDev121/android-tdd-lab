@@ -6,26 +6,29 @@ import org.junit.Test
 
 class QuestionUnitTest {
 
+    val correctAnswer = "correctAnswer"
+    val inCorrectAnswer = "inCorrectAnswer"
 
     @Test
     fun whenCreatingQuestion_shouldNotHaveAnsweredOption() {
-        val question = Question()
+        val question = Question(correctAnswer,inCorrectAnswer)
         Assert.assertNull(question.answeredOption)
     }
 
 
     @Test
     fun whenAnsweringQuestion_shouldHaveTheSameAnswer() {
-        val question = Question()
-        val myAnswer = "myAnswer"
-        question.answer(myAnswer)
-        Assert.assertEquals(myAnswer, question.answeredOption)
+        val question = Question(
+            correctAnswer,
+            inCorrectAnswer,
+        )
+        question.answer(correctAnswer)
+        Assert.assertEquals(correctAnswer, question.answeredOption)
     }
 
     @Test
     fun whenAnsweringCorrect_shouldGiveTrueResult() {
-        val correctAnswer = "correctAnswer"
-        val inCorrectAnswer = "inCorrectAnswer"
+
         val question = Question(
             correctAnswer,
             inCorrectAnswer,
@@ -33,6 +36,31 @@ class QuestionUnitTest {
 
         val result = question.answer(correctAnswer)
         Assert.assertTrue(result)
+    }
+
+
+    @Test
+    fun whenAnswerIncorrect_shouldGiveFalseResult() {
+
+        val question = Question(
+            correctAnswer,
+            inCorrectAnswer,
+        )
+
+        val result = question.answer(userAnswer = inCorrectAnswer)
+        Assert.assertFalse(result)
+    }
+
+
+    @Test(expected = IllegalArgumentException::class)
+    fun whenAnswering_shouldAcceptOnlyValidQuestion() {
+        val question = Question(
+            correctAnswer,
+            inCorrectAnswer,
+        )
+
+        val invalidAnswer = "invalidAnswer"
+        question.answer(invalidAnswer)
     }
 
 
