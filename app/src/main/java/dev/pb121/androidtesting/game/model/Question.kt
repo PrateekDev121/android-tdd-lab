@@ -6,4 +6,9 @@ class Question(
 ) {
     var answeredOption: String? = null
         private set
+
+    fun answer(userAnswer: String): Boolean {
+        answeredOption = userAnswer
+        return answeredOption == correctAnswer
+    }
 }
