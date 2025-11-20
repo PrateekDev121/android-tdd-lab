@@ -3,9 +3,11 @@ package dev.pb121.androidtesting.game.model
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class GameUnitTest {
 
@@ -82,10 +84,34 @@ class GameUnitTest {
 
 
     @Test
-    fun `whenAnswering_shouldDelegateToQuestion`(){
+    fun `whenAnswering_shouldDelegateToQuestion`() {
         val question = mock<Question>()
         val game = Game(questions = listOf(question), hScore = 0)
-        game.answer(question,"OPTION")
+        game.answer(question, "OPTION")
         verify(question).answer(eq("OPTION"))
+    }
+
+    @Test
+    fun `whenAnswering_scoreShouldBeIncrementBy1`() {
+        val question = mock<Question>()
+        whenever(question.answer(anyString())).thenReturn(true)
+
+
+        val game = Game(questions = listOf(question), hScore = 0)
+        game.answer(question, "MyOption")
+
+        Assert.assertEquals(1, game.currentScore)
+    }
+
+    @Test
+    fun `whenAnswering_scoreShouldNotIncrement`() {
+        val question = mock<Question>()
+        whenever(question.answer(anyString())).thenReturn(false)
+
+
+        val game = Game(questions = listOf(question), hScore = 0)
+        game.answer(question, "MyOption")
+
+        Assert.assertEquals(0, game.currentScore)
     }
 }

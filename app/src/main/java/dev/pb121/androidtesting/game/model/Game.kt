@@ -26,6 +26,9 @@ class Game(
     }
 
     fun answer(question: Question,option:String){
-        question.answer(userAnswer = option)
+       val result =  question.answer(userAnswer = option)
+        if(result){
+            incrementScore()
+        }
     }
 }
