@@ -6,6 +6,7 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -25,11 +26,10 @@ class GameUnitTest {
     fun `game should have a list of questions and return first if have question`() {
         val game = Game(
             questions = questionList,
-            hScore = 0,
+            score = Score(0)
         )
         val nextQuestion = game.nextQuestion()
         Assert.assertEquals(q1, nextQuestion)
-
     }
 
     //game cannot be initialized with empty list of questions
@@ -38,7 +38,7 @@ class GameUnitTest {
     fun `game should not init with empty list of question`() {
         Game(
             questions = emptyList(),
-            hScore = 0
+            score = Score(0)
         )
     }
 
@@ -47,7 +47,7 @@ class GameUnitTest {
         val maxSize = 1
         val game = Game(
             questions = questionList.take(n = maxSize).takeIf { it.size == maxSize }!!,
-            hScore = 0,
+            score = Score(0)
         )
 
         game.nextQuestion()
@@ -61,7 +61,7 @@ class GameUnitTest {
     @Test
     fun `whenAnswering_shouldDelegateToQuestion`() {
         val question = mock<Question>()
-        val game = Game(questions = listOf(question), hScore = 0)
+        val game = Game(questions = listOf(question), score = Score(0))
         game.answer(question, "OPTION")
         verify(question).answer(eq("OPTION"))
     }
@@ -70,23 +70,24 @@ class GameUnitTest {
     fun `whenAnswering_scoreShouldBeIncrementBy1`() {
         val question = mock<Question>()
         whenever(question.answer(anyString())).thenReturn(true)
+        val score = mock<Score>()
 
-
-        val game = Game(questions = listOf(question), hScore = 0)
+        val game = Game(questions = listOf(question), score = score)
         game.answer(question, "MyOption")
 
-        Assert.assertEquals(1, game.currentScore)
+        verify(score).increment()
     }
 
     @Test
     fun `whenAnswering_scoreShouldNotIncrement`() {
         val question = mock<Question>()
         whenever(question.answer(anyString())).thenReturn(false)
+        val score = mock<Score>()
 
 
-        val game = Game(questions = listOf(question), hScore = 0)
+        val game = Game(questions = listOf(question), score = score)
         game.answer(question, "MyOption")
 
-        Assert.assertEquals(0, game.currentScore)
+        verify(score, never()).increment()
     }
 }

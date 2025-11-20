@@ -2,27 +2,26 @@ package dev.pb121.androidtesting.game.model
 
 class Game(
     questions: List<Question>,
-    hScore: Int
+    val score: Score
 ) {
 
     val questionList =
-        questions.takeIf { it.isNotEmpty() }?.toMutableList() ?: throw IllegalArgumentException("Questions list can not be empty")
+        questions.takeIf { it.isNotEmpty() }?.toMutableList()
+            ?: throw IllegalArgumentException("Questions list can not be empty")
 
-    val score = Score(hScore = hScore)
-
-    val highestScore:Int
+    val highestScore: Int
         get() = score.highestScore
 
-    val currentScore:Int
+    val currentScore: Int
         get() = score.currentScore
 
     fun nextQuestion(): Question? {
         return questionList.removeFirstOrNull()
     }
 
-    fun answer(question: Question,option:String){
-       val result =  question.answer(userAnswer = option)
-        if(result){
+    fun answer(question: Question, option: String) {
+        val result = question.answer(userAnswer = option)
+        if (result) {
             score.increment()
         }
     }
