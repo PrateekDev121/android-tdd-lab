@@ -20,31 +20,6 @@ class GameUnitTest {
         questionList = listOf(q1, q2)
     }
 
-    @Test
-    fun whenIncrement_scoreShouldIncreasedBy1() {
-
-        val game = Game(questions = questionList, hScore = 0)
-        game.incrementScore()
-        Assert.assertEquals("current score should be 1", 1, game.currentScore)
-    }
-
-    @Test
-    fun wheIncrementScore_aboveHighScore_highScoreShouldIncrement() {
-        val game = Game(questions = questionList, hScore = 0)
-        game.incrementScore()
-        Assert.assertEquals("high score should be 1", 1, game.highestScore)
-    }
-
-    @Test
-    fun wheIncrementScore_belowHighScore_highScoreShouldIncrement() {
-        val game = Game(questions = questionList, hScore = 10)
-        game.incrementScore()
-        Assert.assertEquals(10, game.highestScore)
-    }
-
-    // game should have a list of question, getting next should return the first
-    // when getting next question, without mre question, it should return null
-    // getOptions method
 
     @Test
     fun `game should have a list of questions and return first if have question`() {

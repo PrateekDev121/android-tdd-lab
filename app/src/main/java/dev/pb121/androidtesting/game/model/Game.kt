@@ -16,10 +16,6 @@ class Game(
     val currentScore:Int
         get() = score.currentScore
 
-    fun incrementScore() {
-       score.increment()
-    }
-
     fun nextQuestion(): Question? {
         return questionList.removeFirstOrNull()
     }
@@ -27,7 +23,7 @@ class Game(
     fun answer(question: Question,option:String){
        val result =  question.answer(userAnswer = option)
         if(result){
-            incrementScore()
+            score.increment()
         }
     }
 }
