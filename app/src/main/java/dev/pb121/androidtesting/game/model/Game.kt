@@ -8,17 +8,16 @@ class Game(
     val questionList =
         questions.takeIf { it.isNotEmpty() }?.toMutableList() ?: throw IllegalArgumentException("Questions list can not be empty")
 
-    var highestScore: Int = hScore
-        private set
+    val score = Score(hScore = hScore)
 
-    var currentScore = 0
-        private set
+    val highestScore:Int
+        get() = score.highestScore
+
+    val currentScore:Int
+        get() = score.currentScore
 
     fun incrementScore() {
-        currentScore++
-        if (currentScore > highestScore) {
-            highestScore++
-        }
+       score.increment()
     }
 
     fun nextQuestion(): Question? {
