@@ -24,4 +24,8 @@ class Game(
     fun nextQuestion(): Question? {
         return questionList.removeFirstOrNull()
     }
+
+    fun answer(question: Question,option:String){
+        question.answer(userAnswer = option)
+    }
 }

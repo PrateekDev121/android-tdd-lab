@@ -3,6 +3,9 @@ package dev.pb121.androidtesting.game.model
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 class GameUnitTest {
 
@@ -75,5 +78,14 @@ class GameUnitTest {
         val question = game.nextQuestion()
 
         Assert.assertNull(question)
+    }
+
+
+    @Test
+    fun `whenAnswering_shouldDelegateToQuestion`(){
+        val question = mock<Question>()
+        val game = Game(questions = listOf(question), hScore = 0)
+        game.answer(question,"OPTION")
+        verify(question).answer(eq("OPTION"))
     }
 }
